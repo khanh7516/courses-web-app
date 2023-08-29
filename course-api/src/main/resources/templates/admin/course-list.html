@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/AdminFragment/admin-layout :: main-fragment(
+~{:: title},
+~{:: .buttons},
+~{admin/AdminFragment/admin-fragment :: table(courseList=${courseList})}
+)}">
+<head>
+    <title>Danh sách khóa học</title>
+</head>
+
+<body>
+        <div class="d-flex mb-3 buttons">
+            <a class="btn btn-primary custom-btn" href="/admin/courses/create">Tạo khóa học</a>
+            <button class="btn btn-secondary custom-btn">Refresh</button>
+        </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/fragments/courses-layout :: main-fragment(
+~{:: title},
+~{::.course-container}
+)}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách khóa học</title>
+</head>
+
+<body>
+
+<div class="course-container mt-5">
+    <div class="container">
+        <div class="row">
+            <div th:replace="~{fragments/fragment :: topiclist(topicList = ${topicList})}"></div>
+
+            <div class="col-md-9">
+                <div class="row justify-content-between">
+                    <div class="col-md-4">
+                        <div class="seach-form d-flex align-items-center rounded shadow-sm mb-4 pe-3">
+                            <input placeholder="Tìm kiếm khóa học" class="form-control border-0 seach-form-input"
+                                   type="search">
+                            <span class="text-black-50 seach-form-button"><i
+                                    class="fa-solid fa-magnifying-glass"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="~{fragments/fragment :: courselist(courseList = ${courseList})}"></div>
+
+                <div class="row">
+                    <div class="d-flex justify-content-center mt-3" id="pagination">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>

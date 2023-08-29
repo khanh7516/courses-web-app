@@ -1,0 +1,60 @@
+<!DOCTYPE html >
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="header(link1, link2, link3, text1, text2)" class="header d-flex align-items-center">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-start align-items-center">
+            <div class="logo">
+                <a th:href="${link1}">
+                    <img src="https://techmaster.vn/resources/image/logo-techmaster/white/white_200x74.png"
+                         alt="logo">
+                </a>
+            </div>
+            <div class="menu">
+                <a class="text-white text-uppercase ms-5" th:href="${link2}" th:text="${text1}">Phòng lab</a>
+                <a class="text-white text-uppercase ms-3" th:href="${link3}" th:text="${text2}">Trực tuyến</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:fragment="topiclist"  class="col-md-3">
+    <button class="btn-unfilter btn btn-danger mb-4 px-5 rounded d-none">Bỏ lọc</button>
+    <h2 class="fs-5 mb-4">Chủ đề</h2>
+    <div class="topic-list">
+        <div th:each="topic : ${topicList}" class="topic-item input-group d-flex align-items-center mb-1">
+            <input type="radio" th:value="${topic}" th:id="${topic}" name="topic" />
+            <label th:for="${topic}" class="ms-2 fs-5" th:text="${topic}">Lập trình Backend</label>
+        </div>
+    </div>
+</div>
+
+
+
+<div  th:fragment="courselist" class="row">
+        <div class="col-md-4" th:each="course : ${courseList}">
+            <a th:href="@{/api/v2/courses/{id} (id = ${course.id})}">
+                <div class="course-item shadow-sm rounded mb-4">
+                    <div class="course-item-image">
+                        <img th:src="${course.thumbnail}"
+                             th:alt="${course.name}">
+                    </div>
+                    <div class="course-item-info p-3">
+                        <h2 class="fs-5 mb-3 text-dark" th:text="${course.name}">Spring Boot - Web Back End</h2>
+                        <p class="type fw-light text-black-50" th:text="${course.type == 'online' ? 'Trực tuyến' : 'Phòng lab'}">Trực tuyến</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+</div>
+
+
+</body>
+</html>

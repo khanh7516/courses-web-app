@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table th:fragment="table" class="table" >
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tên khóa học</th>
+        <th>Hình thức</th>
+        <th>Chủ đề</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course, status : ${courseList}">
+        <td th:text="${status.index + 1}"></td>
+        <td><a th:href="@{/admin/courses/{id} (id = ${course.id})}" th:text="${course.name}"></a></td>
+        <td th:text="${course.type}"></td>
+        <td>
+            <th:block th:if="${not #lists.isEmpty(course.topics)}">
+                    <span th:each="topic, topicIndex : ${course.topics}">
+                        <span th:text="${topic}"></span>
+                        <span th:if="${topicIndex.index < #lists.size(course.topics) - 1}">, </span>
+                    </span>
+            </th:block>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:fragment="row" class="row">
+    <div th:insert="${leftContent}" class="col-md-7">
+    </div>
+    <div th:insert="${rightContent}" class="col-md-5">
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>

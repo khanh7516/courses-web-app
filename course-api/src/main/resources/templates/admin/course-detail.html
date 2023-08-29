@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/AdminFragment/admin-layout :: main-fragment(
+~{:: title},
+~{:: .buttons},
+~{admin/AdminFragment/admin-fragment :: row(leftContent = ~{:: #left}, rightContent = ~{:: #right}) }
+)}">
+<head>
+    <title>Chi tiết khóa học</title>
+</head>
+
+<body>
+    <div class="d-flex mb-3 buttons">
+        <a class="btn btn-primary" href="#">Tạo</a>
+        <a class="btn btn-secondary" href="/admin/courses">Quay lại</a>
+    </div>
+
+            <th:block id="left">
+                <div class="mb-3">
+                    <label for="courseName" class="form-label">Tên khóa học</label>
+                    <input type="text" class="form-control" id="courseName" name="courseName"
+                           th:value="${courseResponse.course.name}">
+                </div>
+                <div class="mb-3">
+                    <label for="courseDescription" class="form-label">Mô tả</label>
+                    <textarea class="form-control" id="courseDescription" name="courseDescription" rows="10"
+                              th:text="${courseResponse.course.description}"></textarea>
+                </div>
+            </th:block>
+
+
+            <th:block id="right">
+                <div class="mb-3">
+                    <label for="courseType" class="form-label">Hình thức học</label>
+                    <select class="form-select" id="courseType" name="courseType">
+                        <option th:value="${courseResponse.course.type}" th:selected="${courseResponse.course.type == 'online'}">Online</option>
+                        <option th:value="${courseResponse.course.type}" th:selected="${courseResponse.course.type == 'onlab'}">OnLab</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="courseTopic" class="form-label">Chủ đề</label>
+                    <select class="form-select" id="courseTopic" name="courseTopic" multiple>
+                        <option value="" disabled>Chọn chủ đề</option>
+                        <option th:each="topic : ${topicList}" th:value="${topic}" th:text="${topic}"
+                                th:selected="${courseResponse.course.topics.contains(topic)}"></option>
+                    </select>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="courseAdvisor" class="form-label">Tư vấn viên</label>
+                    <select class="form-select" id="courseAdvisor" name="courseAdvisor">
+                        <option value="" disabled selected>Chọn tư vấn viên</option>
+                        <option th:each="user : ${userList}" th:value="${user.name}" th:text="${user.name}" th:selected="${user.name == courseResponse.user.name}" ></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Hình ảnh</label>
+                    <img th:src="${courseResponse.course.thumbnail}" th:alt="${courseResponse.course.name}" class="img-fluid">
+                    <button type="button" class="btn btn-primary mt-2">Đổi ảnh</button>
+                </div>
+            </th:block>
+
+</body>
+</html>
