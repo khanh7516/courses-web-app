@@ -12,4 +12,7 @@ public class CourseDAOImpl implements CourseDAO {
         return CourseDB.courseList;
     }
 
+    public void  saveCourse(Course course) {
+        CourseDB.courseList.add(course);
+    }
 }

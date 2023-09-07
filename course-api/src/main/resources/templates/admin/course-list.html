@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/AdminFragment/admin-layout :: main-fragment(
 ~{:: title},
 ~{:: .buttons},
-~{admin/AdminFragment/admin-fragment :: table(courseList=${courseList})}
+~{admin/AdminFragment/admin-fragment :: table(courseList=${courseList})},
+~{}
 )}">
 <head>
     <title>Danh sách khóa học</title>

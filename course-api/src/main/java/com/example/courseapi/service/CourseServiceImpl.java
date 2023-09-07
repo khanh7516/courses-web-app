@@ -1,16 +1,19 @@
 package com.example.courseapi.service;
 
 import com.example.courseapi.dao.CourseDAO;
-import com.example.courseapi.dao.CourseDAOImpl;
 import com.example.courseapi.dao.UserDAO;
 import com.example.courseapi.model.Course;
 import com.example.courseapi.model.User;
+import com.example.courseapi.request.UpsertCourseRequest;
 import com.example.courseapi.response.CourseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class CourseServiceImpl implements CourseService{
     @Autowired
@@ -83,6 +86,51 @@ public class CourseServiceImpl implements CourseService{
         return onlabCourses;
     }
 
+
+    public Course pushCourse(UpsertCourseRequest upsertCourseRequest) {
+        upsertCourseRequest.setId(courseDAO.findAll().get(courseDAO.findAll().size()-1).getId() + 1);
+        Course course = new Course(
+                upsertCourseRequest.getId(),
+                upsertCourseRequest.getName(),
+                upsertCourseRequest.getDescription(),
+                upsertCourseRequest.getType(),
+                upsertCourseRequest.getTopics(),
+                upsertCourseRequest.getThumbnail(),
+                upsertCourseRequest.getUserId()
+        );
+
+        courseDAO.saveCourse(course);
+        return course;
+    }
+
+    @Override
+    public Course updateCourse(Integer id, UpsertCourseRequest course) {
+        Optional<Course> foundCourse = courseDAO.findAll().stream().filter(c -> c.getId().equals(id)).findFirst();
+
+        if(foundCourse.isPresent()) {
+            Course existCourse = foundCourse.get();
+
+            existCourse.setName(course.getName());
+            existCourse.setDescription(course.getDescription());
+            existCourse.setType(course.getType());
+            existCourse.setTopics(course.getTopics());
+            existCourse.setThumbnail(course.getThumbnail());
+            existCourse.setUserId(course.getUserId());
+
+            return foundCourse.get();
+        }else return null;
+    }
+
+    @Override
+    public boolean deleteCourse(Integer id) {
+        Optional<Course> foundCourse = courseDAO.findAll().stream().filter(c -> c.getId().equals(id)).findFirst();
+
+        if(foundCourse.isPresent()) {
+            Course deleteCourse = foundCourse.get();
+            courseDAO.findAll().remove(deleteCourse);
+            return true;
+        }else return false;
+    }
 
 
 }

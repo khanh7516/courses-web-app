@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CourseDAO {
     public List<Course> findAll();
+    public void saveCourse(Course course);
 
 }

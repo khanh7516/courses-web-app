@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/AdminFragment/admin-layout :: main-fragment(
 ~{:: title},
 ~{:: .buttons},
-~{admin/AdminFragment/admin-fragment :: row(leftContent = ~{:: #left}, rightContent = ~{:: #right}) }
+~{admin/AdminFragment/admin-fragment :: row(leftContent = ~{:: #left}, rightContent = ~{:: #right}) },
+~{:: #js}
 )}">
 <head>
     <title>Chi tiết khóa học</title>
@@ -11,10 +12,10 @@
 <body>
 <div class="d-flex justify-content-between mb-3 buttons">
     <div class="d-flex">
-        <button class="btn btn-primary me-2">Tạo</button>
+        <button class="btn btn-primary me-2" onclick="updateCourse()">Cập nhật</button>
         <a class="btn btn-secondary" href="/admin/courses">Quay lại</a>
     </div>
-    <button class="btn btn-danger">Xóa</button>
+    <button class="btn btn-danger" onclick="deleteCourse(${courseResponse.course.id})">Xóa</button>
 </div>
 
             <th:block id="left">
@@ -60,10 +61,84 @@
 
                 <div class="mb-3">
                     <label class="form-label">Hình ảnh</label>
-                    <img th:src="${courseResponse.course.thumbnail}" th:alt="${courseResponse.course.name}" class="img-fluid">
-                    <button type="button" class="btn btn-primary mt-2">Đổi ảnh</button>
+                    <img class="img-fluid" id="course-logo-preview">
+                    <label for="course-logo-input" class="btn btn-warning">Đổi ảnh</label>
+                        <input type="file" id="course-logo-input" class="d-none"/>
                 </div>
             </th:block>
 
+
+<th:block id="js">
+            <script th:inline="javascript">
+
+                function updateCourse() {
+                    // Lấy thông tin khóa học từ form và gọi API để cập nhật
+                    const courseName = document.getElementById("courseName").value;
+                    const courseDescription = document.getElementById("courseDescription").value;
+                    const courseType = document.getElementById("courseType").value;
+                    const courseTopic = [...document.getElementById("courseTopic").selectedOptions].map(option => option.value);
+                    const courseAdvisor = document.getElementById("courseAdvisor").value;
+
+                    const updatedCourse = {
+                        name: courseName,
+                        description: courseDescription,
+                        type: courseType,
+                        topics: courseTopic,
+                        advisor: courseAdvisor
+                    };
+
+                    axios.put(`/admin/courses/${courseResponse.course.id}`, updatedCourse)
+                        .then(response => {
+                            toastr.success("Cập nhật thông tin khóa học thành công");
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            toastr.error("Cập nhật thông tin khóa học thất bại");
+                        });
+                }
+
+                function deleteCourse(id) {
+                    if (confirm("Bạn có chắc chắn muốn xóa khóa học này?")) {
+                        axios.delete(`/admin/courses/${id}`)
+                            .then(() => {
+                                toastr.success("Xóa khóa học thành công");
+                                window.location.href = '/admin/courses';
+                            })
+                            .catch(error => {
+                                console.error(error);
+                                toastr.error("Xóa khóa học thất bại");
+                            });
+                    }
+                }
+
+
+                const courseThumbnailPreviewEl = document.getElementById("course-logo-preview")
+                const courseThumbnailInputEl = document.getElementById("course-logo-input");
+
+
+                courseThumbnailInputEl.addEventListener("change", async (e) => {
+
+                    const file = e.target.files[0];
+                    console.log(file);
+
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    try {
+                        const res = await axios.post("api/v1/files", formData);
+                        if(res.status === 200) {
+                            courseThumbnailPreviewEl.src = res.data;
+                            toastr.success("Upload ảnh thành công");
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+
+
+                })
+
+
+            </script>
+</th:block>
 </body>
 </html>
