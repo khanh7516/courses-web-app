@@ -84,7 +84,7 @@
                         description: courseDescription,
                         type: courseType,
                         topics: courseTopic,
-                        advisor: courseAdvisor
+                        userId: courseAdvisor
                     };
 
                     axios.put(`/admin/courses/${courseResponse.course.id}`, updatedCourse)

@@ -3,7 +3,7 @@
 ~{:: title},
 ~{:: .buttons},
 ~{admin/AdminFragment/admin-fragment :: row(leftContent = ~{:: #left}, rightContent = ~{:: #right}) },
-~{}
+~{:: #js}
 )}">
 
 <head>
@@ -13,7 +13,7 @@
 
 <body>
     <div class="d-flex mb-3 buttons">
-        <button class="btn btn-primary me-2">Tạo</button>
+        <button class="btn btn-primary me-2" onclick="createCourse()">Tạo</button>
         <a class="btn btn-secondary" href="/admin/courses">Quay lại</a>
     </div>
             <th:block id="left">
@@ -51,5 +51,40 @@
                     </select>
                 </div>
             </th:block>
+
+    <th:block id="js">
+        <script th:inline="javascript">
+            function createCourse() {
+                const courseName = document.getElementById("courseName").value;
+                const courseDescription = document.getElementById("courseDescription").value;
+                const courseType = document.getElementById("courseType").value;
+                const courseTopic = [...document.getElementById("courseTopic").selectedOptions].map(option => option.value);
+                const courseAdvisor = document.getElementById("courseAdvisor").value;
+
+                const newCourse = {
+                    name: courseName,
+                    description: courseDescription,
+                    type: courseType,
+                    topics: courseTopic,
+                    userId: courseAdvisor
+                };
+
+                axios.post("/api/v1/courses", newCourse)
+                    .then(response => {
+                        toastr.success("Tạo khóa học thành công");
+                        window.location.href = "/admin/courses";
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        toastr.error("Tạo khóa học thất bại");
+                    });
+            }
+
+
+        </script>
+    </th:block>
+
+
+
 </body>
 </html>
